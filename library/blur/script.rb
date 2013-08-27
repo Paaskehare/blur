@@ -45,8 +45,8 @@ module Blur
           @__emissions.push emission if respond_to? emission
         end
         
-        __send__ :loaded if respond_to? :loaded
         __send__ :module_init if respond_to? :module_init
+        __send__ :loaded if respond_to? :loaded
       end
     end
     

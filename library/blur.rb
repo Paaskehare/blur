@@ -20,6 +20,7 @@ require 'blur/script/fantasy'
 require 'blur/network/channel'
 require 'blur/network/command'
 require 'blur/network/connection'
+require 'blur/script/dsl'
 require 'blur/script/messageparsing'
 
 # Blur is a very modular IRC-framework for ruby.
