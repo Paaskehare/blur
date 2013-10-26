@@ -128,10 +128,42 @@ describe Blur::Client do
   end
 
   describe "#quit" do
-    it "should send graceful quit"
-    it "should disconnect all networks"
-    it "should unload scripts"
-    it "should stop the event loop"
+    let(:networks) { [double('network').as_null_object, double('network').as_null_object] }
+
+    before do
+      allow(EventMachine).to receive :stop
+      allow(subject).to receive :unload_scripts
+
+      subject.networks = networks
+    end
+
+    it "should send graceful quit" do
+      subject.networks.each do |network|
+        expect(network).to receive(:transmit).with :QUIT, anything
+      end
+
+      subject.quit
+    end
+
+    it "should disconnect all networks" do
+      subject.networks.each do |network|
+        expect(network).to receive :disconnect
+      end
+
+      subject.quit
+    end
+
+    it "should unload scripts" do
+      expect(subject).to receive :unload_scripts
+
+      subject.quit
+    end
+
+    it "should stop the event loop" do
+      expect(EventMachine).to receive :stop
+
+      subject.quit
+    end
   end
 
   describe "#network_connection_closed" do
