@@ -167,11 +167,31 @@ describe Blur::Client do
   end
 
   describe "#network_connection_closed" do
-    it "should emit :connection_closed"
+    it "should emit :connection_closed" do
+      network = double 'network'
+      expect(subject).to receive(:emit).with :connection_close, network
+
+      subject.network_connection_closed network
+    end
   end
 
   describe "#unload_scripts" do
-    it "should unload scripts"
-    it "should clear the list of scripts"
+    before do
+      subject.scripts = [double('script').as_null_object, double('script').as_null_object]
+    end
+
+    it "should unload scripts" do
+      subject.scripts.each do |script|
+        expect(script).to receive :unload!
+      end
+
+      subject.unload_scripts
+    end
+
+    it "should clear the list of scripts" do
+      subject.unload_scripts
+
+      expect(subject.scripts).to be_empty
+    end
   end
 end
